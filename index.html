@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orçamento Vidraçaria</title>
+  <style>
+   :root {
+  --primary-color: #0077cc;
+  --secondary-color: #005fa3;
+  --background: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-color: #333;
+  --border-color: #ddd;
+  --shadow: 0 4px 15px rgba(0, 119, 204, 0.2);
+  --shadow-hover: 0 6px 20px rgba(0, 95, 163, 0.3);
+  --input-focus: #66a3ff;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--background);
+  color: var(--text-color);
+  margin: 0;
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: var(--card-bg);
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+h1, h2, h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+label {
+  display: block;
+  margin-top: 20px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #004a99;
+  transition: color 0.3s ease;
+}
+
+input, select {
+  width: 100%;
+  max-width: 350px;
+  padding: 12px 15px;
+  margin-top: 8px;
+  font-size: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: #fafafa;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 8px var(--input-focus);
+  background: #fff;
+}
+
+button {
+  margin-top: 30px;
+  padding: 14px 20px;
+  font-size: 11px;
+  background: linear-gradient(135deg, #0077cc, #005fa3);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,119,204,0.4);
+  transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #005fa3, #003f6d);
+  box-shadow: 0 8px 20px rgba(0,95,163,0.6);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(0,119,204,0.2);
+}
+
+.resultado {
+  margin-top: 50px;
+  padding-top: 40px;
+  border-top: 3px solid var(--primary-color);
+  background: #f0f7ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 119, 204, 0.1);
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.resultado ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.resultado ul li {
+  position: inherit;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #004a99;
+  transition: color 0.3s ease;
+}
+
+.resultado ul li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+  font-size: 1.2rem;
+  top: 0;
+  line-height: 1;
+  user-select: none;
+}
+
+.resultado ul li:hover {
+  color: var(--secondary-color);
+}
+
+.total {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #003366;
+  margin-top: 25px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.venda {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #007700;
+  margin-top: 15px;
+  text-shadow: 0 1px 2px rgba(0, 100, 0, 0.3);
+}
+
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  input, select {
+    max-width: 100%;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+/* Impressão */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  /* Mostra apenas o conteúdo do PDF */
+  #pdfContent, #pdfContent * {
+    visibility: visible;
+    page-break-inside: avoid !important;
+    page-break-before: auto !important;
+    page-break-after: auto !important;
+  }
+
+  /* Estilização principal para impressão */
+  #pdfContent {
+    position: static !important; /* NÃO usar absolute para evitar cortes */
+    left: 0;
+    top: 0;
+    background: #222 !important; /* fundo escuro */
+    color: #f1f1f1 !important;   /* texto claro */
+    padding: 20px !important;
+    box-shadow: none !important;
+    background-image: none !important;
+    filter: none !important;
+  }
+
+  /* Remove fundo e sombras da seção de resultado */
+  #pdfContent .resultado {
+    background: none !important;
+    box-shadow: none !important;
+    background-image: none !important;
+  }
+
+  /* Estiliza todos os textos dentro do PDF */
+  #pdfContent h1, 
+  #pdfContent h2, 
+  #pdfContent h3, 
+  #pdfContent p, 
+  #pdfContent ul,
+  #pdfContent li {
+    color: black !important;
+    background: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Ícone ✔ mais escuro para contraste no fundo escuro */
+  #pdfContent li::before {
+    color: white !important;
+  }
+}
+
+
+  #listaMateriais li {
+  cursor: pointer;
+  transition: background 0.3s;
+  
+}
+
+#listaMateriais li:hover {
+  background-color: #e4e2e2;
+}
+
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Orçamento - Vidraçaria</h1>
+
+    <label>Nome do Cliente:</label>
+    <input type="text" id="clienteNome" placeholder="Digite o nome completo" />
+
+    <label>Telefone:</label>
+    <input type="text" id="clienteTelefone" placeholder="(00) 00000-0000" />
+
+    <label>Largura (em metros):</label>
+    <input type="number" id="largura" step="0.01" placeholder="Ex: 1.20" />
+
+    <label>Altura (em metros):</label>
+    <input type="number" id="altura" step="0.01" placeholder="Ex: 2.00" />
+
+    <label>Tipo de Vidro:</label>
+    <select id="tipoVidro">
+      <option value="comum">Comum</option>
+      <option value="temperado" selected>Temperado</option>
+      <option value="laminado">Laminado</option>
+    </select>
+
+    <label>Quantidade:</label>
+    <input type="number" id="quantidade" min="1" step="1" value="1" />
+
+    <label>Margem de Lucro (%):</label>
+    <input type="number" id="margem" value="40" />
+
+    <button onclick="calcularOrcamento()">Calcular Orçamento</button>
+    <button onclick="exportarPDF()">Exportar para PDF</button>
+    <button onclick="limparMateriais()">Limpar Materiais</button>
+
+    <div id="pdfContent">
+      <div class="resultado" id="resultado"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    function formatarReal(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function calcularOrcamento() {
+      const clienteNome = document.getElementById("clienteNome").value.trim();
+      const clienteTelefone = document.getElementById("clienteTelefone").value.trim();
+      const largura = parseFloat(document.getElementById("largura").value);
+      const altura = parseFloat(document.getElementById("altura").value);
+      const tipoVidro = document.getElementById("tipoVidro").value;
+      const quantidade = parseInt(document.getElementById("quantidade").value);
+      const margem = parseFloat(document.getElementById("margem").value) / 100;
+
+      if (!largura || !altura || !clienteNome || !clienteTelefone) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+      }
+
+      let preco_m2 = 147;
+      if (tipoVidro === "comum") preco_m2 = 90;
+      else if (tipoVidro === "laminado") preco_m2 = 180;
+
+      const vidro_m2 = largura * altura;
+      const vidro_preco = vidro_m2 * preco_m2 * quantidade;
+
+      const trilho_superior = (largura / 6) * 126 * quantidade;
+      const trilho_inferior = (largura / 6) * 110 * quantidade;
+      const capa = (largura / 6) * 90 * quantidade;
+      const unico = (largura / 6) * 78 * quantidade;
+      const pu8 = (largura / 6) * 85 * quantidade;
+      const pu10 = (largura / 6) * 95 * quantidade;
+      const veda = (largura / 6) * 50 * quantidade;
+      const click = (largura / 6) * 60 * quantidade;
+      const roldanas = 4 * quantidade;
+      const cunha = 0.4 * quantidade;
+      const batente = 1.0 * quantidade;
+      const silicone = 20 * quantidade;
+      const puxador = 37 * quantidade;
+      const fechadura = 65 * quantidade;
+      const parafusos = 10 * quantidade;
+      const suporte = 15 * quantidade;
+
+      const custo_total = vidro_preco + trilho_superior + trilho_inferior + capa + unico + pu8 + pu10 +
+        veda + click + roldanas + cunha + batente + silicone + puxador +
+        fechadura + parafusos + suporte;
+
+      const valor_venda = custo_total + custo_total * margem;
+      const nomeVidroFormatado = tipoVidro.charAt(0).toUpperCase() + tipoVidro.slice(1);
+
+    document.getElementById("resultado").innerHTML = `
+  <h2>Orçamento</h2>
+  <p><strong>Cliente:</strong> ${clienteNome}</p>
+  <p><strong>Telefone:</strong> ${clienteTelefone}</p>
+  <p><strong>Tipo de Vidro:</strong> ${nomeVidroFormatado}</p>
+  <p><strong>Quantidade:</strong> ${quantidade}</p>
+  <p><strong>Dimensões:</strong> ${largura.toFixed(2)} m × ${altura.toFixed(2)} m</p>
+  <p><strong>Data:</strong> ${new Date().toLocaleDateString()}</p>
+
+  <h3>Materiais (clique para remover):</h3>
+  <ul id="listaMateriais">
+    <li data-valor="${vidro_preco}" onclick="removerMaterial(this)">Vidro (${vidro_m2.toFixed(2)} m² × ${quantidade}): ${formatarReal(vidro_preco)}</li>
+    <li data-valor="${trilho_superior}" onclick="removerMaterial(this)">Trilho Superior: ${formatarReal(trilho_superior)}</li>
+    <li data-valor="${trilho_inferior}" onclick="removerMaterial(this)">Trilho Inferior: ${formatarReal(trilho_inferior)}</li>
+    <li data-valor="${capa}" onclick="removerMaterial(this)">Capa: ${formatarReal(capa)}</li>
+    <li data-valor="${unico}" onclick="removerMaterial(this)">Único: ${formatarReal(unico)}</li>
+    <li data-valor="${pu8}" onclick="removerMaterial(this)">P.U 8: ${formatarReal(pu8)}</li>
+    <li data-valor="${pu10}" onclick="removerMaterial(this)">P.U 10: ${formatarReal(pu10)}</li>
+    <li data-valor="${veda}" onclick="removerMaterial(this)">Veda: ${formatarReal(veda)}</li>
+    <li data-valor="${click}" onclick="removerMaterial(this)">Click: ${formatarReal(click)}</li>
+    <li data-valor="${roldanas}" onclick="removerMaterial(this)">Roldanas: ${formatarReal(roldanas)}</li>
+    <li data-valor="${cunha}" onclick="removerMaterial(this)">Cunha: ${formatarReal(cunha)}</li>
+    <li data-valor="${batente}" onclick="removerMaterial(this)">Batente Inferior: ${formatarReal(batente)}</li>
+    <li data-valor="${silicone}" onclick="removerMaterial(this)">Silicone: ${formatarReal(silicone)}</li>
+    <li data-valor="${puxador}" onclick="removerMaterial(this)">Puxador: ${formatarReal(puxador)}</li>
+    <li data-valor="${fechadura}" onclick="removerMaterial(this)">Fechadura: ${formatarReal(fechadura)}</li>
+    <li data-valor="${parafusos}" onclick="removerMaterial(this)">Parafusos e Arruelas: ${formatarReal(parafusos)}</li>
+    <li data-valor="${suporte}" onclick="removerMaterial(this)">Suporte: ${formatarReal(suporte)}</li>
+  </ul>
+  <p class="total" id="totalCusto">Total de Custo: ${formatarReal(custo_total)}</p>
+  <p class="venda" id="valorVenda">Valor Total: ${formatarReal(valor_venda)}</p>
+`;
+
+    }
+
+    function removerMaterial(botao) {
+      const item = botao.closest('li');
+      if (item) {
+        item.remove();
+        atualizarTotais();
+      }
+    }
+
+    function atualizarTotais() {
+      const materiais = document.querySelectorAll('#listaMateriais li');
+      let totalCusto = 0;
+
+      materiais.forEach(item => {
+        const valor = parseFloat(item.dataset.valor);
+        if (!isNaN(valor)) {
+          totalCusto += valor;
+        }
+      });
+
+      const margem = parseFloat(document.getElementById("margem").value) / 100 || 0;
+      const valorVenda = totalCusto + totalCusto * margem;
+
+      document.getElementById("totalCusto").innerText = `Total de Custo: ${formatarReal(totalCusto)}`;
+      document.getElementById("valorVenda").innerText = `Valor com Lucro: ${formatarReal(valorVenda)}`;
+    }
+
+    function limparMateriais() {
+      const confirmar = confirm("Tem certeza que deseja remover todos os materiais?");
+      if (!confirmar) return;
+
+      const lista = document.getElementById("listaMateriais");
+      if (lista) lista.innerHTML = "";
+
+      document.getElementById("totalCusto").innerText = "Total de Custo: R$ 0,00";
+      document.getElementById("valorVenda").innerText = "Valor Total: R$ 0,00";
+    }
+function exportarPDF() {
+  const resultado = document.getElementById("resultado");
+  const pdfContent = document.getElementById("pdfContent");
+
+  if (!resultado.innerHTML.trim()) {
+    alert("Gere um orçamento antes de exportar.");
+    return;
+  }
+
+  const nomeCliente = document.getElementById("clienteNome").value.trim() || "orcamento";
+  const data = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+  const nomeArquivo = `Orcamento_${nomeCliente.replace(/\s+/g, "_")}_${data}.pdf`;
+
+  html2canvas(pdfContent, {
+    scale: 1,
+    useCORS: true,
+    allowTaint: true,
+    logging: false,
+  }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+
+    // Usar o jsPDF do window.jspdf.jsPDF
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4'
+    });
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+
+    const imgX = (pdfWidth - imgWidth * ratio) / 2;
+    const imgY = 20;
+
+    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+
+    pdf.save(nomeArquivo);
+  }).catch(err => {
+    alert("Erro ao gerar PDF: " + err);
+    console.error(err);
+  });
+}
+
+
+  </script>
+</body>
+</html>
